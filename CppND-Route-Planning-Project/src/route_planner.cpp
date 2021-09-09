@@ -138,9 +138,8 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
 
-    // TODO: Implement your solution here.
+    // Init nodes
     current_node = start_node;
-
     current_node -> h_value = CalculateHValue(current_node);
     current_node -> g_value = 0;
 
@@ -152,11 +151,25 @@ void RoutePlanner::AStarSearch() {
     {
         current_node = NextNode();
 
+        /*
+         move a check if the current node is the intended node or not, 
+         if yes construct final path then break or return 
+         so what I mean is that construct final path if the current node is the end node then return
+        */
+
+       // The AStarSearch needs to stop and construct the final path when it reaches the end_node
+       //(Hint from Nayir M - Knowledge Board)
+       if(current_node->distance(*end_node) == 0)
+       {
+           RoutePlanner::m_Model.path = ConstructFinalPath(current_node);
+           return; 
+       }
+
         RoutePlanner::AddNeighbors(current_node);
        
     }
-    
-    m_Model.path = ConstructFinalPath(current_node);
+    return;
+
 
 
 
